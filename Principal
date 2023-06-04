@@ -1,0 +1,251 @@
+import javax.swing.*;
+import javax.swing.border.TitledBorder;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
+
+public class Funcionario extends JFrame {
+
+    public static void main(String[] args) {
+        Funcionario app = new Funcionario();
+        app.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    }
+        private static final long serialVersionUID = 1L;
+        public String codigo;
+        public String nomeFunc;
+        public String Cargo;
+        public double salario;
+        public String nomeDependente;
+        public int totalDependentes;
+
+        public String getCodigo () {
+            return codigo;
+        }
+        public String getNomeFunc () {
+            return nomeFunc;
+        }
+        public String getCargo () {
+            return Cargo;
+        }
+        public double getSalario () {
+            return salario;
+        }
+
+        public String getNomeDependente () {
+            return nomeDependente;
+        }
+
+        public int getTotalDependentes () {
+            return totalDependentes;
+        }
+
+        private JPanel inputDetailJPanel;
+
+        //Código Funcionário
+        private JLabel CodigoJLabel;
+        private JTextField CodigoJTextField;
+
+        //Nome Funcionário
+        private JLabel NomeFuncJLabel;
+        private JTextField NomeFuncJTextField;
+
+
+        //Cargo
+        private JLabel CargoJLabel;
+        private JTextField CargoJTextField;
+
+        //Salario
+        private JLabel SalarioJLabel;
+        private JTextField SalarioJTextField;
+
+        //Nome Dependente
+        private JLabel nomeDependenteJLabel;
+        private JTextField nomeDependenteJTextField;
+
+        //Total Dependentes
+        private JLabel TotalDependenteJLabel;
+        private JTextField TotalDependenteJTextField;
+
+        //Botões
+
+        private JButton CriarFuncionarioJButton;
+        private JButton ApagarFuncionarioJButton;
+        private JButton CriarDependenteJButton;
+        private JButton AlterarSalarioJButton;
+
+        //Tela Detalhes Funcionários
+         private JLabel displayJLabel;
+         private static JTextArea displayJTextArea;
+
+         //ArrayList<Funcionario> Funcionarios = new ArrayList<>();
+
+        public Funcionario(){
+            interfaceUsuario();
+        }
+
+        private void interfaceUsuario(){
+            Container contentPane = getContentPane();
+
+            contentPane.setLayout(null);
+
+            //Layout Empresa
+            inputDetailJPanel = new JPanel();
+            inputDetailJPanel.setBounds(16,16,208,250);
+            inputDetailJPanel.setBorder(new TitledBorder("Empresa"));
+            inputDetailJPanel.setLayout(null);
+            contentPane.add(inputDetailJPanel);
+
+            //Código - JLabel
+            CodigoJLabel = new JLabel();
+            CodigoJLabel.setBounds(8,32,90,23);
+            CodigoJLabel.setText("Código:");
+            inputDetailJPanel.add(CodigoJLabel);
+
+            //Código - JText
+            CodigoJTextField = new JTextField();
+            CodigoJTextField.setBounds(112,32,80,21);
+            CodigoJTextField.setHorizontalAlignment(JTextField.RIGHT);
+            inputDetailJPanel.add(CodigoJTextField);
+
+            //Nome Funcionário - JLabel
+            NomeFuncJLabel = new JLabel();
+            NomeFuncJLabel.setBounds(8,56,100,23);
+            NomeFuncJLabel.setText("Funcionário: ");
+            inputDetailJPanel.add(NomeFuncJLabel);
+
+            //Nome Funcionário - JText
+            NomeFuncJTextField = new JTextField();
+            NomeFuncJTextField.setBounds(112,56,80,21);
+            NomeFuncJTextField.setHorizontalAlignment(JTextField.RIGHT);
+            inputDetailJPanel.add(NomeFuncJTextField);
+
+            //Cargo - JLabel
+            CargoJLabel = new JLabel();
+            CargoJLabel.setBounds(8,80,60,32);
+            CargoJLabel.setText("Cargo: ");
+            inputDetailJPanel.add(CargoJLabel);
+
+            //Cargo - JTextField
+            CargoJTextField = new JTextField();
+            CargoJTextField.setBounds(112,80,80,21);
+            CargoJTextField.setHorizontalAlignment(JTextField.RIGHT);
+            inputDetailJPanel.add(CargoJTextField);
+
+            //Salario - JLabel
+            SalarioJLabel = new JLabel();
+            SalarioJLabel.setBounds(8,104,80,23);
+            SalarioJLabel.setText("Salário: ");
+            inputDetailJPanel.add(SalarioJLabel);
+
+            //Salário - JText
+            SalarioJTextField = new JTextField();
+            SalarioJTextField.setBounds(112,104,80,21);
+            SalarioJTextField.setHorizontalAlignment(JTextField.RIGHT);
+            inputDetailJPanel.add(SalarioJTextField);
+
+            //Nome Dependente - JLabel
+            nomeDependenteJLabel = new JLabel();
+            nomeDependenteJLabel.setBounds(8,128,60,23);
+            nomeDependenteJLabel.setText("Nome Dependente: ");
+            inputDetailJPanel.add(nomeDependenteJLabel);
+
+            //Nome Dependente - JText
+            nomeDependenteJTextField = new JTextField();
+            nomeDependenteJTextField.setBounds(112,128,80,21);
+            nomeDependenteJTextField.setHorizontalAlignment(JTextField.RIGHT);
+            inputDetailJPanel.add(nomeDependenteJTextField);
+
+            //Total Dependentes - JLabel
+            TotalDependenteJLabel = new JLabel();
+            TotalDependenteJLabel.setBounds(8,152,60,21);
+            TotalDependenteJLabel.setText("Dependentes: ");
+            inputDetailJPanel.add(TotalDependenteJLabel);
+
+
+            //Total Dependente - JText
+            TotalDependenteJTextField = new JTextField();
+            TotalDependenteJTextField.setBounds(112,152,80,21);
+            TotalDependenteJTextField.setHorizontalAlignment(JTextField.RIGHT);
+            inputDetailJPanel.add(TotalDependenteJTextField);
+
+            //Ativação Botão Criar
+            CriarFuncionarioJButton = new JButton();
+            CriarFuncionarioJButton.setBounds(112,152,80,24);
+            CriarFuncionarioJButton.setText("Criar");
+            inputDetailJPanel.add(CriarFuncionarioJButton);
+            CriarFuncionarioJButton.addActionListener(
+                    new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
+                            CriarFuncionarioJButtonAtivacao(e);
+                        }
+                    }
+            );
+
+            //Ativação Botão Apagar
+            ApagarFuncionarioJButton = new JButton();
+            ApagarFuncionarioJButton.setBounds(16,152,80,24);
+            ApagarFuncionarioJButton.setText("Apagar");
+            inputDetailJPanel.add(ApagarFuncionarioJButton);
+            ApagarFuncionarioJButton.addActionListener(
+                    new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
+                            ApagarFuncionarioJButtonAtivacao(e);
+                        }
+                    }
+            );
+
+            //
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    }
