@@ -1,0 +1,80 @@
+public class DadosFuncionario{
+    public String codigo, nomeFunc, cargo, nomeDependente;
+    public double salario;
+    public int totalDependentes;
+
+    public DadosFuncionario() {
+        this.codigo = "VAZIO";
+        this.nomeFunc = "VAZIO";
+        this.cargo = "VAZIO";
+        this.nomeDependente = "VAZIO";
+        this.salario = 0;
+        this.totalDependentes = 0;
+    }
+
+    public DadosFuncionario(String codigoFuncionario, String nomeFuncionario, String cargoFuncionario, String nomeDP, double valorSalario, int totalDP) {
+        codigo = codigoFuncionario;
+        nomeFunc = nomeFuncionario;
+        cargo = cargoFuncionario;
+        nomeDependente = nomeDP;
+        salario = valorSalario;
+        totalDependentes = totalDP;
+    }
+
+    public void impressaoOUTPUT(){
+
+    }
+    public void bonusFuncionario(int totalDP){
+        salario = salario + 0.02*salario*totalDependentes;
+    }
+
+    public String getCodigo() {
+        return codigo;
+    }
+
+    public String getNomeFunc() {
+        return nomeFunc;
+    }
+
+    public String getCargo() {
+        return cargo;
+    }
+
+    public String getNomeDependente() {
+        return nomeDependente;
+    }
+
+    public double getSalario() {
+        return salario;
+    }
+
+    public int getTotalDependentes() {
+        return totalDependentes;
+    }
+
+    public void setCodigo(String codigoFuncionario) {
+        this.codigo = codigoFuncionario;
+    }
+
+    public void setNomeFunc(String nomeFuncionario) {
+        this.nomeFunc = nomeFuncionario;
+    }
+
+    public void setCargo(String cargoFuncionario) {
+        this.cargo = cargoFuncionario;
+    }
+
+    public void setNomeDependente(String nomeDP) {
+        this.nomeDependente = nomeDP;
+    }
+
+    public void setSalario(double valorSalario) {
+        this.salario = valorSalario;
+    }
+
+    public void setTotalDependentes(int totalDP) {
+        this.totalDependentes = totalDP;
+    }
+
+
+}
