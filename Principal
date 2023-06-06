@@ -3,9 +3,8 @@ import javax.swing.border.TitledBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.FileNotFoundException;
+import java.io.*;
 import java.util.ArrayList;
-import java.util.Formatter;
 
 public class Funcionario extends JFrame {
 
@@ -13,6 +12,7 @@ public class Funcionario extends JFrame {
         Funcionario app = new Funcionario();
         app.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
+
     private static final long serialVersionUID = 1L;
     public String codigo;
     public String nomeFunc;
@@ -21,24 +21,27 @@ public class Funcionario extends JFrame {
     public String nomeDependente;
     public int totalDependentes;
 
-    public String getCodigo () {
+    public String getCodigo() {
         return codigo;
     }
-    public String getNomeFunc () {
+
+    public String getNomeFunc() {
         return nomeFunc;
     }
-    public String getCargo () {
+
+    public String getCargo() {
         return cargo;
     }
-    public double getSalario () {
+
+    public double getSalario() {
         return salario;
     }
 
-    public String getNomeDependente () {
+    public String getNomeDependente() {
         return nomeDependente;
     }
 
-    public int getTotalDependentes () {
+    public int getTotalDependentes() {
         return totalDependentes;
     }
 
@@ -73,106 +76,106 @@ public class Funcionario extends JFrame {
 
     private JButton CriarFuncionarioJButton;
     private JButton ApagarFuncionarioJButton;
-    private JButton CriarDependenteJButton;
+    private JButton BonusFuncionarioJButton;
     private JButton MostrarDadosJButton;
     private JButton ImprimirDadosJButton;
+    private JButton AlterarSalarioJButton;
 
     //Tela Detalhes Funcionários
     private JLabel displayJLabel;
     private static JTextArea displayJTextArea;
 
-    ArrayList<DadosFuncionario> Funcionarios = new ArrayList<>();
 
-    public Funcionario(){
+    public Funcionario() {
         interfaceUsuario();
     }
 
-    private void interfaceUsuario(){
+    private void interfaceUsuario() {
         Container contentPane = getContentPane();
         contentPane.setLayout(null);
 
         //Layout Empresa
         inputDetailJPanel = new JPanel();
-        inputDetailJPanel.setBounds(16,16,208,296);
+        inputDetailJPanel.setBounds(16, 16, 216, 304);
         inputDetailJPanel.setBorder(new TitledBorder("Empresa"));
         inputDetailJPanel.setLayout(null);
         contentPane.add(inputDetailJPanel);
 
         //Código - JLabel
         CodigoJLabel = new JLabel();
-        CodigoJLabel.setBounds(8,32,90,23);
+        CodigoJLabel.setBounds(8, 32, 90, 23);
         CodigoJLabel.setText("Código:");
         inputDetailJPanel.add(CodigoJLabel);
 
         //Código - JText
         CodigoJTextField = new JTextField();
-        CodigoJTextField.setBounds(112,32,80,21);
+        CodigoJTextField.setBounds(128, 32, 80, 21);
         CodigoJTextField.setHorizontalAlignment(JTextField.RIGHT);
         inputDetailJPanel.add(CodigoJTextField);
 
         //Nome Funcionário - JLabel
         NomeFuncJLabel = new JLabel();
-        NomeFuncJLabel.setBounds(8,56,100,23);
-        NomeFuncJLabel.setText("Funcionário: ");
+        NomeFuncJLabel.setBounds(8, 56, 124, 23);
+        NomeFuncJLabel.setText("Nome Funcionário: ");
         inputDetailJPanel.add(NomeFuncJLabel);
 
         //Nome Funcionário - JText
         NomeFuncJTextField = new JTextField();
-        NomeFuncJTextField.setBounds(112,56,80,21);
+        NomeFuncJTextField.setBounds(128, 56, 80, 21);
         NomeFuncJTextField.setHorizontalAlignment(JTextField.RIGHT);
         inputDetailJPanel.add(NomeFuncJTextField);
 
         //Cargo - JLabel
         CargoJLabel = new JLabel();
-        CargoJLabel.setBounds(8,75,80,32);
+        CargoJLabel.setBounds(8, 75, 80, 32);
         CargoJLabel.setText("Cargo: ");
         inputDetailJPanel.add(CargoJLabel);
 
         //Cargo - JTextField
         CargoJTextField = new JTextField();
-        CargoJTextField.setBounds(112,80,80,21);
+        CargoJTextField.setBounds(128, 80, 80, 21);
         CargoJTextField.setHorizontalAlignment(JTextField.RIGHT);
         inputDetailJPanel.add(CargoJTextField);
 
         //Salario - JLabel
         SalarioJLabel = new JLabel();
-        SalarioJLabel.setBounds(8,104,80,23);
+        SalarioJLabel.setBounds(8, 104, 80, 23);
         SalarioJLabel.setText("Salário: ");
         inputDetailJPanel.add(SalarioJLabel);
 
         //Salário - JText
         SalarioJTextField = new JTextField();
-        SalarioJTextField.setBounds(112,104,80,21);
+        SalarioJTextField.setBounds(128, 104, 80, 21);
         SalarioJTextField.setHorizontalAlignment(JTextField.RIGHT);
         inputDetailJPanel.add(SalarioJTextField);
 
         //Nome Dependente - JLabel
         nomeDependenteJLabel = new JLabel();
-        nomeDependenteJLabel.setBounds(8,128,100,23);
-        nomeDependenteJLabel.setText("Dependente: ");
+        nomeDependenteJLabel.setBounds(8, 128, 124, 23);
+        nomeDependenteJLabel.setText("Nome Dependente: ");
         inputDetailJPanel.add(nomeDependenteJLabel);
 
         //Nome Dependente - JText
         nomeDependenteJTextField = new JTextField();
-        nomeDependenteJTextField.setBounds(112,128,80,21);
+        nomeDependenteJTextField.setBounds(128, 128, 80, 21);
         nomeDependenteJTextField.setHorizontalAlignment(JTextField.RIGHT);
         inputDetailJPanel.add(nomeDependenteJTextField);
 
         //Total Dependentes - JLabel
         TotalDependenteJLabel = new JLabel();
-        TotalDependenteJLabel.setBounds(8,152,100,21);
-        TotalDependenteJLabel.setText("Quantidade: ");
+        TotalDependenteJLabel.setBounds(8, 152, 124, 21);
+        TotalDependenteJLabel.setText("Total Dependente: ");
         inputDetailJPanel.add(TotalDependenteJLabel);
 
         //Total Dependente - JText
         TotalDependenteJTextField = new JTextField();
-        TotalDependenteJTextField.setBounds(112,152,80,21);
+        TotalDependenteJTextField.setBounds(128, 152, 80, 21);
         TotalDependenteJTextField.setHorizontalAlignment(JTextField.RIGHT);
         inputDetailJPanel.add(TotalDependenteJTextField);
 
         //Ativação Botão Criar
         CriarFuncionarioJButton = new JButton();
-        CriarFuncionarioJButton.setBounds(112,176,80,24);
+        CriarFuncionarioJButton.setBounds(104, 176, 88, 24);
         CriarFuncionarioJButton.setText("Criar");
         inputDetailJPanel.add(CriarFuncionarioJButton);
         CriarFuncionarioJButton.addActionListener(
@@ -186,72 +189,91 @@ public class Funcionario extends JFrame {
 
         //Ativação Botão Apagar
         ApagarFuncionarioJButton = new JButton();
-        ApagarFuncionarioJButton.setBounds(16,176,80,24);
+        ApagarFuncionarioJButton.setBounds(16, 176, 88, 24);
         ApagarFuncionarioJButton.setText("Apagar");
         inputDetailJPanel.add(ApagarFuncionarioJButton);
         ApagarFuncionarioJButton.addActionListener(
                 new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
-                      ApagarFuncionarioJButtonAtivacao(e);
+                        ApagarFuncionarioJButtonAtivacao(e);
                     }
                 }
         );
 
-        //Ativação Botão Criar Dependente
-        CriarDependenteJButton = new JButton();
-        CriarDependenteJButton.setBounds(16,204,176,24);
-        CriarDependenteJButton.setText("Criar Dependente");
-        inputDetailJPanel.add(CriarDependenteJButton);
-        CriarDependenteJButton.addActionListener(
+        //Ativação Botão Alterar Salário
+        AlterarSalarioJButton = new JButton();
+        AlterarSalarioJButton.setBounds(16, 200, 176, 24);
+        AlterarSalarioJButton.setText("Alterar Salário");
+        inputDetailJPanel.add(AlterarSalarioJButton);
+        AlterarSalarioJButton.addActionListener(
                 new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
-                        CriarDependenteJButtonAtivacao(e);
+                        try {
+                            AlterarSalarioJButtonAtivacao(e);
+                        } catch (IOException ex) {
+                            throw new RuntimeException(ex);
+                        }
                     }
                 }
         );
-
+        //Ativação Botão Calcular Bonus
+        BonusFuncionarioJButton = new JButton();
+        BonusFuncionarioJButton.setBounds(16, 224, 176, 24);
+        BonusFuncionarioJButton.setText("Calcular Bônus");
+        inputDetailJPanel.add(BonusFuncionarioJButton);
+        BonusFuncionarioJButton.addActionListener(
+                new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        BonusFuncionarioJButtonAtivacao(e);
+                    }
+                }
+        );
         //Ativação Botão Mostrar Dados
         MostrarDadosJButton = new JButton();
-        MostrarDadosJButton.setBounds(16,232,176,24);
+        MostrarDadosJButton.setBounds(16, 248, 176, 24);
         MostrarDadosJButton.setText("Mostrar Dados");
         inputDetailJPanel.add(MostrarDadosJButton);
         MostrarDadosJButton.addActionListener(
                 new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
-                    MostrarDadosJButtonAtivacao(e);
+                        MostrarDadosJButtonAtivacao(e);
                     }
                 }
         );
         //Ativação Botão Imprimir Dados
         ImprimirDadosJButton = new JButton();
-        ImprimirDadosJButton.setBounds(16,256,176,24);
+        ImprimirDadosJButton.setBounds(16, 272, 176, 24);
         ImprimirDadosJButton.setText("Imprimir Dados");
         inputDetailJPanel.add(ImprimirDadosJButton);
         ImprimirDadosJButton.addActionListener(
                 new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
-                        ImprimirDadosJButtonAtivacao(e);
+                        try {
+                            ImprimirDadosJButtonAtivacao(e);
+                        } catch (FileNotFoundException ex) {
+                            throw new RuntimeException(ex);
+                        }
                     }
                 }
         );
-
         //Criação do expositor de dados
         displayJLabel = new JLabel();
-        displayJLabel.setBounds(240,16,220,23);
+        displayJLabel.setBounds(240, 16, 220, 23);
         displayJLabel.setText("Informações dos Funcionários: ");
         contentPane.add(displayJLabel);
 
         //Criação da área dos Textos
         displayJTextArea = new JTextArea();
         JScrollPane scrollPane = new JScrollPane(displayJTextArea);
-        scrollPane.setBounds(240,48,402,184);
+        scrollPane.setBounds(240, 48, 424, 184);
         scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
         contentPane.add(scrollPane);
-        displayJTextArea.setText("Seja bem vindo! No momento não há contas criadas.");
+        displayJTextArea.setText("Seja bem vindo! No momento não há funcionários cadastrados.");
 
         //Informações a serem mostradas
         CodigoJTextField.setText("");
@@ -263,35 +285,49 @@ public class Funcionario extends JFrame {
 
         //Informações Janela
         setTitle("Gerenciamento de Pessoas");
-        setSize(696,348);
+        setSize(680, 356);
         setVisible(true);
     }
 
-    private void CriarFuncionarioJButtonAtivacao(ActionEvent e){
+    //Array List Funcionarios
+    ArrayList<DadosFuncionario> Funcionarios = new ArrayList<>();
+
+    private void CriarFuncionarioJButtonAtivacao(ActionEvent e) {
         displayJTextArea.setText("");
 
         codigo = "";
         nomeFunc = "";
         cargo = "";
         salario = 0;
+        nomeDependente = "";
+        totalDependentes = 0;
 
         codigo = CodigoJTextField.getText();
         nomeFunc = NomeFuncJTextField.getText();
         cargo = CargoJTextField.getText();
         salario = Double.parseDouble(SalarioJTextField.getText());
+        nomeDependente = nomeDependenteJTextField.getText();
+        totalDependentes = Integer.parseInt(TotalDependenteJTextField.getText());
 
+        if ((codigo != "") & (nomeFunc != "")) {
+            Funcionarios.add(new DadosFuncionario(codigo, nomeFunc, cargo, salario));
+            DadosFuncionario dadosTemp = (DadosFuncionario) Funcionarios.get(Funcionarios.size() - 1);
 
+            displayJTextArea.setText("Funcionário: " + Funcionarios.size() + "\n Codigo: " + dadosTemp.getCodigo() + "\n Nome: " + dadosTemp.getNomeFunc() +
+                    "\n Cargo: " + dadosTemp.getCargo() + "\n Salário: R$ " + dadosTemp.getSalario() + "\n Dependentes: " + getTotalDependentes() + "\n Nome: " + getNomeDependente());
+        }
     }
 
-    private void ApagarFuncionarioJButtonAtivacao(ActionEvent e){
+    private void ApagarFuncionarioJButtonAtivacao(ActionEvent e) {
         if (Funcionarios.size() == 0) {
             displayJTextArea.setText("Não há funcionários cadastrados!");
-        }else{
-            String codigo = CodigoJTextField.getText();
-            for(int i = 0; i < Funcionarios.size(); i++){
-                DadosFuncionario dadosTemp = (DadosFuncionario)Funcionarios.get(i);
-                if((dadosTemp.codigo == codigo)){
+        } else {
+            String Codigo = CodigoJTextField.getText();
+            for (int i = 0; i < Funcionarios.size(); i++) {
+                DadosFuncionario dadosTemp = (DadosFuncionario) Funcionarios.get(i);
+                if ((dadosTemp.codigo == Codigo)) {
                     Funcionarios.remove(i);
+                    displayJTextArea.setText("Funcionário de Código: " + CodigoJTextField.getText() + " apagado!");
                 }
             }
         }
@@ -302,59 +338,78 @@ public class Funcionario extends JFrame {
         SalarioJTextField.setText("0");
         nomeDependenteJTextField.setText("");
         TotalDependenteJTextField.setText("0");
-
-
-    }
-    private void CriarDependenteJButtonAtivacao(ActionEvent e){
-
-    }
-    private void MostrarDadosJButtonAtivacao(ActionEvent e){
-
     }
 
-    private void ImprimirDadosJButtonAtivacao(ActionEvent e){
-        AbrirArquivo();
-        InserirDados();
-        FecharArquivo();
+    private void BonusFuncionarioJButtonAtivacao(ActionEvent e) {
+        displayJTextArea.setText("");
 
-        public static void AbrirArquivo(){
-            try{
-                output = new Formatter("Funcionarios.txt");
-            } catch (SecurityException ex) {
-                System.err.println();
+        if (getTotalDependentes() == 0) {
+            displayJTextArea.setText("Sem Dependentes cadastrados!");
+        } else {
+            String codigo = CodigoJTextField.getText();
+            String nomeFuncionario = NomeFuncJTextField.getText();
+            Double salario = Double.parseDouble(SalarioJTextField.getText());
+
+            displayJTextArea.setText("O Valor do Salário Bônus do Funcionário: " + getNomeFunc() + " é de: R$" + (getSalario() + getSalario() * 0.02 * getTotalDependentes()) +
+                    "\nNúmero de dependentes digitados: " + getTotalDependentes());
+        }
+    }
+
+    private void MostrarDadosJButtonAtivacao(ActionEvent e) {
+        codigo = CodigoJTextField.getText();
+        displayJTextArea.setText("");
+
+        if (Funcionarios.isEmpty()) {
+            displayJTextArea.setText("Não há funcionários cadastrados!");
+        } else {
+            for (int i = 0; i < Funcionarios.size(); i++) {
+                DadosFuncionario dadosTemp = (DadosFuncionario) Funcionarios.get(i);
+                displayJTextArea.append("Funcionário: " + "\n Codigo: " + dadosTemp.getCodigo() + "\n Nome: " + dadosTemp.getNomeFunc() +
+                        "\n Cargo: " + dadosTemp.getCargo() + "\n Salário: R$ " + dadosTemp.getSalario() + "\n Nome Dependente(s): " + getNomeDependente() +
+                        "\n Dependente(s): " + getTotalDependentes() + "\n------------------------\n");
+
             }
         }
-
+        CodigoJTextField.setText("");
+        NomeFuncJTextField.setText("");
+        CargoJTextField.setText("");
+        SalarioJTextField.setText("0");
+        nomeDependenteJTextField.setText("");
+        TotalDependenteJTextField.setText("0");
     }
 
+    private void AlterarSalarioJButtonAtivacao(ActionEvent e) throws IOException {
+
+        displayJTextArea.setText("");
+        if (Funcionarios.size() == 0) {
+            displayJTextArea.setText("Não há funcionários cadastrados!");
+        } else {
+            double SalarioFuncionario = Double.parseDouble(SalarioJTextField.getText());
+            String CodigoFuncionario = CodigoJTextField.getText();
+
+            for (int i = 0; i < Funcionarios.size(); i++) {
+                DadosFuncionario dadoTemp = (DadosFuncionario) Funcionarios.get(i);
+                if ((dadoTemp.codigo == CodigoFuncionario) && (SalarioFuncionario > 0)) ;
+
+            }
+        }
+    }
+
+    private void ImprimirDadosJButtonAtivacao(ActionEvent e) throws FileNotFoundException {
+        PrintWriter out = new PrintWriter("ListaFuncionarios.txt");
+
+            out.println("/------------------------------/");
+            out.println("Nome Funcionário: " + getNomeFunc());
+            out.println("Código: " + getCodigo());
+            out.println("Cargo: " + getCargo());
+            out.println("Salario: " + getSalario());
+            out.println("Dependentes: " + getTotalDependentes());
+            out.println("Nome Dependente: " + getNomeDependente());
+            out.println("Salário com bônus por dependente: "+(getSalario()+getSalario()*0.02*getTotalDependentes()));
+            out.println("/-----------------------------/");
+
+            out.close();
+        }
+      }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-}
