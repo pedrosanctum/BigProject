@@ -1,4 +1,4 @@
-public class Dependentes extends DadosFuncionario{
+public class Dependentes{
     public int totalDependentes;
     public String nomeDependentes;
 
