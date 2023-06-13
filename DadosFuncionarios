@@ -1,17 +1,28 @@
-public class DadosFuncionario{
-    public String codigo, nomeFunc, cargo;
+public class DadosFuncionario extends Dependentes{
+    public String codigo, nome, cargo;
     public double salario;
 
-    public DadosFuncionario() {
+    DadosFuncionario(){
         this.codigo = "VAZIO";
-        this.nomeFunc = "VAZIO";
+        this.nome = "VAZIO";
         this.cargo = "VAZIO";
         this.salario = 0;
+        this.nomeDependentes = "VAZIO";
+        this.totalDependentes = 0;
+
+    }
+    DadosFuncionario(String codigoFunc, String nomeFunc, String cargoFunc, double salarioFunc, String nomeDependenteFunc, int totalDependenteFunc) {
+        this.codigo = codigoFunc;
+        this.nome = nomeFunc;
+        this.cargo = cargoFunc;
+        this.salario = salarioFunc;
+        this.nomeDependentes = nomeDependenteFunc;
+        this.totalDependentes = totalDependenteFunc;
     }
 
     public DadosFuncionario(String codigoFuncionario, String nomeFuncionario, String cargoFuncionario, double valorSalario) {
         codigo = codigoFuncionario;
-        nomeFunc = nomeFuncionario;
+        nome = nomeFuncionario;
         cargo = cargoFuncionario;
         salario = valorSalario;
     }
@@ -20,8 +31,8 @@ public class DadosFuncionario{
         return codigo;
     }
 
-    public String getNomeFunc() {
-        return nomeFunc;
+    public String getNome() {
+        return nome;
     }
 
     public String getCargo() {
@@ -40,8 +51,8 @@ public class DadosFuncionario{
         this.codigo = codigoFuncionario;
     }
 
-    public void setNomeFunc(String nomeFuncionario) {
-        this.nomeFunc = nomeFuncionario;
+    public void setNome(String nomeFuncionario) {
+        this.nome = nomeFuncionario;
     }
 
     public void setCargo(String cargoFuncionario) {
@@ -51,8 +62,5 @@ public class DadosFuncionario{
     public void setSalario(double valorSalario) {
         this.salario = valorSalario;
     }
-
-
-
 
 }
