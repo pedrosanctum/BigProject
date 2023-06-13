@@ -303,6 +303,11 @@ public class Funcionario extends JFrame {
         nomeDependente = nomeDependenteJTextField.getText();
         totalDependentes = Integer.parseInt(TotalDependenteJTextField.getText());
 
+        Funcionarios.forEach(value -> {
+            if(value.getCodigo().equals(codigo)){
+                throw new IllegalArgumentException("Código já existente!");
+            }
+        });
         try {
             if (SalarioJTextField.getText() == "0") {
                 salario = 0;
@@ -315,30 +320,30 @@ public class Funcionario extends JFrame {
 
         try {
             if ((codigo != "") & (nomeFunc != "")) {
-                    Funcionarios.add(new DadosFuncionario(codigo, nomeFunc, cargo, salario, nomeDependente, totalDependentes));
-                    DadosFuncionario dadoTemp = (DadosFuncionario) Funcionarios.get(Funcionarios.size() - 1);
-                    displayJTextArea.setText("Funcionário: " + Funcionarios.size() + "\n Codigo: " + dadoTemp.getCodigo() + "\n Nome: " + dadoTemp.getNome() +
-                            "\n Cargo: " + dadoTemp.getCargo() + "\n Salário: R$ " + dadoTemp.getSalario() + "\n Dependentes: " + dadoTemp.getTotalDependentes() + "\n Nome: " + dadoTemp.getNomeDependentes());
-                }
+                Funcionarios.add(new DadosFuncionario(codigo, nomeFunc, cargo, salario, nomeDependente, totalDependentes));
+                DadosFuncionario dadoTemp = (DadosFuncionario) Funcionarios.get(Funcionarios.size() - 1);
+                displayJTextArea.setText("Funcionário: " + Funcionarios.size() + "\n Codigo: " + dadoTemp.getCodigo() + "\n Nome: " + dadoTemp.getNome() +
+                        "\n Cargo: " + dadoTemp.getCargo() + "\n Salário: R$ " + dadoTemp.getSalario() + "\n Dependentes: " + dadoTemp.getTotalDependentes() + "\n Nome: " + dadoTemp.getNomeDependentes());
+            }
 
         } catch (Exception ex) {
-        throw new RuntimeException(ex);
+            throw new RuntimeException(ex);
         }
     }
     private void ApagarFuncionarioJButtonAtivacao(ActionEvent e) {
 
-            if (Funcionarios.size() == 0) {
-                displayJTextArea.setText("Sem funcionários cadastrados!");
-            }else{
-                String codigoFunc = CodigoJTextField.getText();
-                for(int i = 0; i < Funcionarios.size();i++){
-                    DadosFuncionario dadoTemp = (DadosFuncionario) Funcionarios.get(i);
-                    if((dadoTemp.getCodigo() == codigoFunc)){
-                        Funcionarios.remove(i);
-                    }
-                    displayJTextArea.setText("Funcionario "+dadoTemp.getNome()+ "-"+ codigoFunc +" apagado!");
+        if (Funcionarios.size() == 0) {
+            displayJTextArea.setText("Sem funcionários cadastrados!");
+        }else{
+            String codigoFunc = CodigoJTextField.getText();
+            for(int i = 0; i < Funcionarios.size();i++){
+                DadosFuncionario dadoTemp = (DadosFuncionario) Funcionarios.get(i);
+                if((dadoTemp.getCodigo().equals(codigoFunc))){
+                    Funcionarios.remove(i);
                 }
+                displayJTextArea.setText("Funcionario "+dadoTemp.getNome()+ "-"+ codigoFunc +" apagado!");
             }
+        }
 
 
         CodigoJTextField.setText("");
@@ -362,7 +367,7 @@ public class Funcionario extends JFrame {
                 DadosFuncionario dadoTemp = (DadosFuncionario) Funcionarios.get(i);
                 displayJTextArea.append("Funcionário: " + "\n Codigo: " + dadoTemp.getCodigo() + "\n Nome: " + dadoTemp.getNome() +
                         "\n Cargo: " + dadoTemp.getCargo() + "\n Salário: R$ " + dadoTemp.getSalario() + "\n Nome Dependente(s): " + dadoTemp.getNomeDependentes() +
-                        "\n Dependente(s): " + dadoTemp.getTotalDependentes() + "\n Bônus no Salário: "+ (dadoTemp.getSalario() + dadoTemp.getSalario() * 0.02 * dadoTemp.getTotalDependentes())+"\n------------------------\n");
+                        "\n Dependente(s): " + dadoTemp.getTotalDependentes() + "\n Bônus no Salário: "+ (dadoTemp.getSalario() * 0.02 * dadoTemp.getTotalDependentes())+"\n------------------------\n");
 
             }
         }
@@ -384,34 +389,36 @@ public class Funcionario extends JFrame {
             String CodigoFuncionario = CodigoJTextField.getText();
             for (int i = 0; i < Funcionarios.size(); i++) {
                 DadosFuncionario dadoTemp = (DadosFuncionario) Funcionarios.get(i);
-                if ((dadoTemp.codigo == CodigoFuncionario) && (SalarioFuncionario > 0))
+                if ((dadoTemp.codigo.equals(CodigoFuncionario)) && (SalarioFuncionario > 0))
                     dadoTemp.setSalario((Double.parseDouble(SalarioJTextField.getText())));
                 Funcionarios.set(i, dadoTemp);
                 displayJTextArea.setText("O novo salário do Funcionário: " + dadoTemp.getCodigo() + " - " + dadoTemp.getNome() + " é de R$ " + dadoTemp.getSalario());
             }
         }
-
-        }
-
+    }
     private void ImprimirDadosJButtonAtivacao(ActionEvent e) throws IOException {
 
         File f1 = new File("ListaFuncionarios.txt");
         FileWriter fw = new FileWriter(f1.getName(), true);
         BufferedWriter out = new BufferedWriter(fw);
 
-            /*out.append("/------------------------------/");
-            out.append("\nNome Funcionário: ").append(getNomeFunc());
-            out.append("\nCódigo: ").append(getCodigo());
-            out.append("\nCargo: ").append(getCargo());
-            out.append("\nSalario: ").append(String.valueOf(getSalario()));
-            out.append("\nDependentes: ").append(String.valueOf(getTotalDependentes()));
-            out.append("\nNome Dependente: ").append(getNomeDependente());
-            out.append("\nSalário com bônus por dependente: ").append(String.valueOf(getSalario() + getSalario() * 0.02 * getTotalDependentes()));
-            out.append("\n");
-            out.close();*/
-
-        }
+        Funcionarios.forEach((funcionario) -> {
+            try {
+                out.append("/------------------------------/");
+                out.append("\nNome Funcionário: ").append(funcionario.getNome());
+                out.append("\nCódigo: ").append(funcionario.getCodigo());
+                out.append("\nCargo: ").append(funcionario.getCargo());
+                out.append("\nSalario: ").append(String.valueOf(funcionario.getSalario()));
+                out.append("\nDependentes: ").append(String.valueOf(funcionario.getTotalDependentes()));
+                out.append("\nNome Dependente: ").append(funcionario.getNomeDependentes());
+                out.append("\nBônus no Salário: ").append(String.valueOf(getSalario() * 0.02 * getTotalDependentes()));
+                out.append("\n");
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
+        });
+        out.close();
     }
-
+}
 
 
