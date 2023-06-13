@@ -5,6 +5,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.*;
 import java.util.ArrayList;
+import java.util.HashSet;
 
 public class Funcionario extends JFrame {
 
@@ -76,7 +77,6 @@ public class Funcionario extends JFrame {
 
     private JButton CriarFuncionarioJButton;
     private JButton ApagarFuncionarioJButton;
-    private JButton BonusFuncionarioJButton;
     private JButton MostrarDadosJButton;
     private JButton ImprimirDadosJButton;
     private JButton AlterarSalarioJButton;
@@ -96,7 +96,7 @@ public class Funcionario extends JFrame {
 
         //Layout Empresa
         inputDetailJPanel = new JPanel();
-        inputDetailJPanel.setBounds(16, 16, 216, 304);
+        inputDetailJPanel.setBounds(16, 16, 216, 280);
         inputDetailJPanel.setBorder(new TitledBorder("Empresa"));
         inputDetailJPanel.setLayout(null);
         contentPane.add(inputDetailJPanel);
@@ -218,22 +218,10 @@ public class Funcionario extends JFrame {
                     }
                 }
         );
-        //Ativação Botão Calcular Bonus
-        BonusFuncionarioJButton = new JButton();
-        BonusFuncionarioJButton.setBounds(16, 224, 176, 24);
-        BonusFuncionarioJButton.setText("Calcular Bônus");
-        inputDetailJPanel.add(BonusFuncionarioJButton);
-        BonusFuncionarioJButton.addActionListener(
-                new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-                        BonusFuncionarioJButtonAtivacao(e);
-                    }
-                }
-        );
+
         //Ativação Botão Mostrar Dados
         MostrarDadosJButton = new JButton();
-        MostrarDadosJButton.setBounds(16, 248, 176, 24);
+        MostrarDadosJButton.setBounds(16, 224, 176, 24);
         MostrarDadosJButton.setText("Mostrar Dados");
         inputDetailJPanel.add(MostrarDadosJButton);
         MostrarDadosJButton.addActionListener(
@@ -246,7 +234,7 @@ public class Funcionario extends JFrame {
         );
         //Ativação Botão Imprimir Dados
         ImprimirDadosJButton = new JButton();
-        ImprimirDadosJButton.setBounds(16, 272, 176, 24);
+        ImprimirDadosJButton.setBounds(16, 248, 176, 24);
         ImprimirDadosJButton.setText("Imprimir Dados");
         inputDetailJPanel.add(ImprimirDadosJButton);
         ImprimirDadosJButton.addActionListener(
@@ -256,6 +244,8 @@ public class Funcionario extends JFrame {
                         try {
                             ImprimirDadosJButtonAtivacao(e);
                         } catch (FileNotFoundException ex) {
+                            throw new RuntimeException(ex);
+                        } catch (IOException ex) {
                             throw new RuntimeException(ex);
                         }
                     }
@@ -285,12 +275,16 @@ public class Funcionario extends JFrame {
 
         //Informações Janela
         setTitle("Gerenciamento de Pessoas");
-        setSize(680, 356);
+        setSize(680, 332);
         setVisible(true);
     }
 
     //Array List Funcionarios
     ArrayList<DadosFuncionario> Funcionarios = new ArrayList<>();
+    ArrayList<Dependentes> DependentesDados = new ArrayList<>();
+
+    //Hash Set Funcionarios
+    HashSet<DadosFuncionario> set = new HashSet<>();
 
     private void CriarFuncionarioJButtonAtivacao(ActionEvent e) {
         displayJTextArea.setText("");
@@ -309,28 +303,43 @@ public class Funcionario extends JFrame {
         nomeDependente = nomeDependenteJTextField.getText();
         totalDependentes = Integer.parseInt(TotalDependenteJTextField.getText());
 
-        if ((codigo != "") & (nomeFunc != "")) {
-            Funcionarios.add(new DadosFuncionario(codigo, nomeFunc, cargo, salario));
-            DadosFuncionario dadosTemp = (DadosFuncionario) Funcionarios.get(Funcionarios.size() - 1);
+        try {
+            if (SalarioJTextField.getText() == "0") {
+                salario = 0;
+            } else {
+                salario = Double.parseDouble(SalarioJTextField.getText());
+            }
+        } catch (NumberFormatException ex) {
+            System.err.println("O número digitado deve ser separado com . invés de ,");
+        }
 
-            displayJTextArea.setText("Funcionário: " + Funcionarios.size() + "\n Codigo: " + dadosTemp.getCodigo() + "\n Nome: " + dadosTemp.getNomeFunc() +
-                    "\n Cargo: " + dadosTemp.getCargo() + "\n Salário: R$ " + dadosTemp.getSalario() + "\n Dependentes: " + getTotalDependentes() + "\n Nome: " + getNomeDependente());
+        try {
+            if ((codigo != "") & (nomeFunc != "")) {
+                    Funcionarios.add(new DadosFuncionario(codigo, nomeFunc, cargo, salario, nomeDependente, totalDependentes));
+                    DadosFuncionario dadoTemp = (DadosFuncionario) Funcionarios.get(Funcionarios.size() - 1);
+                    displayJTextArea.setText("Funcionário: " + Funcionarios.size() + "\n Codigo: " + dadoTemp.getCodigo() + "\n Nome: " + dadoTemp.getNome() +
+                            "\n Cargo: " + dadoTemp.getCargo() + "\n Salário: R$ " + dadoTemp.getSalario() + "\n Dependentes: " + dadoTemp.getTotalDependentes() + "\n Nome: " + dadoTemp.getNomeDependentes());
+                }
+
+        } catch (Exception ex) {
+        throw new RuntimeException(ex);
         }
     }
-
     private void ApagarFuncionarioJButtonAtivacao(ActionEvent e) {
-        if (Funcionarios.size() == 0) {
-            displayJTextArea.setText("Não há funcionários cadastrados!");
-        } else {
-            String Codigo = CodigoJTextField.getText();
-            for (int i = 0; i < Funcionarios.size(); i++) {
-                DadosFuncionario dadosTemp = (DadosFuncionario) Funcionarios.get(i);
-                if ((dadosTemp.codigo == Codigo)) {
-                    Funcionarios.remove(i);
-                    displayJTextArea.setText("Funcionário de Código: " + CodigoJTextField.getText() + " apagado!");
+
+            if (Funcionarios.size() == 0) {
+                displayJTextArea.setText("Sem funcionários cadastrados!");
+            }else{
+                String codigoFunc = CodigoJTextField.getText();
+                for(int i = 0; i < Funcionarios.size();i++){
+                    DadosFuncionario dadoTemp = (DadosFuncionario) Funcionarios.get(i);
+                    if((dadoTemp.getCodigo() == codigoFunc)){
+                        Funcionarios.remove(i);
+                    }
+                    displayJTextArea.setText("Funcionario "+dadoTemp.getNome()+ "-"+ codigoFunc +" apagado!");
                 }
             }
-        }
+
 
         CodigoJTextField.setText("");
         NomeFuncJTextField.setText("");
@@ -338,21 +347,8 @@ public class Funcionario extends JFrame {
         SalarioJTextField.setText("0");
         nomeDependenteJTextField.setText("");
         TotalDependenteJTextField.setText("0");
-    }
 
-    private void BonusFuncionarioJButtonAtivacao(ActionEvent e) {
-        displayJTextArea.setText("");
 
-        if (getTotalDependentes() == 0) {
-            displayJTextArea.setText("Sem Dependentes cadastrados!");
-        } else {
-            String codigo = CodigoJTextField.getText();
-            String nomeFuncionario = NomeFuncJTextField.getText();
-            Double salario = Double.parseDouble(SalarioJTextField.getText());
-
-            displayJTextArea.setText("O Valor do Salário Bônus do Funcionário: " + getNomeFunc() + " é de: R$" + (getSalario() + getSalario() * 0.02 * getTotalDependentes()) +
-                    "\nNúmero de dependentes digitados: " + getTotalDependentes());
-        }
     }
 
     private void MostrarDadosJButtonAtivacao(ActionEvent e) {
@@ -363,10 +359,10 @@ public class Funcionario extends JFrame {
             displayJTextArea.setText("Não há funcionários cadastrados!");
         } else {
             for (int i = 0; i < Funcionarios.size(); i++) {
-                DadosFuncionario dadosTemp = (DadosFuncionario) Funcionarios.get(i);
-                displayJTextArea.append("Funcionário: " + "\n Codigo: " + dadosTemp.getCodigo() + "\n Nome: " + dadosTemp.getNomeFunc() +
-                        "\n Cargo: " + dadosTemp.getCargo() + "\n Salário: R$ " + dadosTemp.getSalario() + "\n Nome Dependente(s): " + getNomeDependente() +
-                        "\n Dependente(s): " + getTotalDependentes() + "\n------------------------\n");
+                DadosFuncionario dadoTemp = (DadosFuncionario) Funcionarios.get(i);
+                displayJTextArea.append("Funcionário: " + "\n Codigo: " + dadoTemp.getCodigo() + "\n Nome: " + dadoTemp.getNome() +
+                        "\n Cargo: " + dadoTemp.getCargo() + "\n Salário: R$ " + dadoTemp.getSalario() + "\n Nome Dependente(s): " + dadoTemp.getNomeDependentes() +
+                        "\n Dependente(s): " + dadoTemp.getTotalDependentes() + "\n Bônus no Salário: "+ (dadoTemp.getSalario() + dadoTemp.getSalario() * 0.02 * dadoTemp.getTotalDependentes())+"\n------------------------\n");
 
             }
         }
@@ -386,30 +382,36 @@ public class Funcionario extends JFrame {
         } else {
             double SalarioFuncionario = Double.parseDouble(SalarioJTextField.getText());
             String CodigoFuncionario = CodigoJTextField.getText();
-
             for (int i = 0; i < Funcionarios.size(); i++) {
                 DadosFuncionario dadoTemp = (DadosFuncionario) Funcionarios.get(i);
-                if ((dadoTemp.codigo == CodigoFuncionario) && (SalarioFuncionario > 0)) ;
-
+                if ((dadoTemp.codigo == CodigoFuncionario) && (SalarioFuncionario > 0))
+                    dadoTemp.setSalario((Double.parseDouble(SalarioJTextField.getText())));
+                Funcionarios.set(i, dadoTemp);
+                displayJTextArea.setText("O novo salário do Funcionário: " + dadoTemp.getCodigo() + " - " + dadoTemp.getNome() + " é de R$ " + dadoTemp.getSalario());
             }
+        }
+
+        }
+
+    private void ImprimirDadosJButtonAtivacao(ActionEvent e) throws IOException {
+
+        File f1 = new File("ListaFuncionarios.txt");
+        FileWriter fw = new FileWriter(f1.getName(), true);
+        BufferedWriter out = new BufferedWriter(fw);
+
+            /*out.append("/------------------------------/");
+            out.append("\nNome Funcionário: ").append(getNomeFunc());
+            out.append("\nCódigo: ").append(getCodigo());
+            out.append("\nCargo: ").append(getCargo());
+            out.append("\nSalario: ").append(String.valueOf(getSalario()));
+            out.append("\nDependentes: ").append(String.valueOf(getTotalDependentes()));
+            out.append("\nNome Dependente: ").append(getNomeDependente());
+            out.append("\nSalário com bônus por dependente: ").append(String.valueOf(getSalario() + getSalario() * 0.02 * getTotalDependentes()));
+            out.append("\n");
+            out.close();*/
+
         }
     }
 
-    private void ImprimirDadosJButtonAtivacao(ActionEvent e) throws FileNotFoundException {
-        PrintWriter out = new PrintWriter("ListaFuncionarios.txt");
-
-            out.println("/------------------------------/");
-            out.println("Nome Funcionário: " + getNomeFunc());
-            out.println("Código: " + getCodigo());
-            out.println("Cargo: " + getCargo());
-            out.println("Salario: " + getSalario());
-            out.println("Dependentes: " + getTotalDependentes());
-            out.println("Nome Dependente: " + getNomeDependente());
-            out.println("Salário com bônus por dependente: "+(getSalario()+getSalario()*0.02*getTotalDependentes()));
-            out.println("/-----------------------------/");
-
-            out.close();
-        }
-      }
 
 
